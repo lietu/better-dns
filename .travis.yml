@@ -10,6 +10,9 @@ cache:
 
 go_import_path: github.com/lietu/better-dns
 
+git:
+  depth: 10
+
 env:
   - GO111MODULE=off
 
@@ -35,6 +38,7 @@ deploy:
 
   - provider: releases
     api_key: $GITHUB_TOKEN
+    edge: true
     file: artifacts/*
     skip_cleanup: true
     prerelease: true
@@ -43,6 +47,7 @@ deploy:
 
   - provider: releases
     api_key: $GITHUB_TOKEN
+    edge: true
     file: artifacts/*
     skip_cleanup: true
     on:
