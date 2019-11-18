@@ -1,0 +1,35 @@
+language: go
+sudo: false
+
+go:
+  - "1.13.x."
+
+env:
+  - GO111MODULE=on
+
+script:
+  # - go test -race -v -bench=. -coverprofile=coverage.txt -covermode=atomic ./...
+
+  - GOOS=windows GOARCH=amd64 go build better-dns.go -o better-dns-x86_64.exe
+  - GOOS=windows GOARCH=386   go build better-dns.go -o better-dns-x86.exe
+
+  - mkdir -p artifacts
+  - mv better-dns-x86_64.exe artifacts
+  - mv better-dns-x86.exe artifacts
+
+deploy:
+
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file: artifacts/*
+    skip_cleanup: true
+    prerelease: true
+    on:
+      branch: master
+
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    file: artifacts/*
+    skip_cleanup: true
+    on:
+      tags: true

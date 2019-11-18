@@ -1,4 +1,4 @@
 *.exe
 /better-dns
-
+coverage.txt
 .idea/

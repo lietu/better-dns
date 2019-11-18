@@ -8,7 +8,6 @@ import (
 )
 
 var blockedEntries = map[string]*shared.BlockEntry{}
-
 var listEntries = map[string]int64{}
 
 func filter(req *dns.Msg) *shared.BlockEntry {
