@@ -24,12 +24,14 @@ func blockFromURL(listURL string) {
 
 	req, err := http.NewRequest("GET", listURL, nil)
 	if err != nil {
-		log.Panicf("Failed to create request to %s: %s", listURL, err)
+		log.Errorf("Failed to create request to %s: %s", listURL, err)
+		return
 	}
 
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
-		log.Panicf("Failed to request %s: %s", listURL, err)
+		log.Errorf("Failed to request %s: %s", listURL, err)
+		return
 	}
 
 	defer resp.Body.Close()
@@ -81,6 +83,7 @@ func loadLists() {
 		"https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt",
 		"https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt",
 		"https://hosts-file.net/ad_servers.txt",
+		"https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext",
 	}
 
 	for i := range urls {
