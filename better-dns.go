@@ -34,7 +34,12 @@ func blockFromURL(listURL string) {
 		return
 	}
 
-	defer resp.Body.Close()
+	defer func() {
+		err := resp.Body.Close()
+		if err != nil {
+			log.Errorf("Error closing request body: %s", err)
+		}
+	}()
 
 	scanner := bufio.NewScanner(resp.Body)
 	scanner.Split(bufio.ScanLines)
@@ -122,7 +127,7 @@ func main() {
 
 	shared.UpdateDnsServers()
 
-	sig := make(chan os.Signal)
+	sig := make(chan os.Signal, 10)
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	s := <-sig
 

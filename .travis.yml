@@ -17,10 +17,17 @@ env:
   - GO111MODULE=on
 
 # Skip Travis's automagic failures in dependency resolution
-install: true
+install:
+  - go get -u honnef.co/go/tools/cmd/staticcheck
+  - go get -u github.com/kisielk/errcheck
+  - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.21.0
 
 script:
   # - go test -race -v -bench=. -coverprofile=coverage.txt -covermode=atomic ./...
+  - go vet . ./client ./server ./shared
+  - staticcheck . ./client ./server ./shared
+  - errcheck . ./client ./server ./shared
+  - golangci-lint run . ./client ./server ./shared
 
   - GOOS=windows GOARCH=amd64 go build -o better-dns-x86_64.exe better-dns.go
   - GOOS=windows GOARCH=386   go build -o better-dns-x86.exe    better-dns.go
