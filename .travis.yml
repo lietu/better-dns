@@ -24,10 +24,11 @@ script:
 
   - GOOS=windows GOARCH=amd64 go build -o better-dns-x86_64.exe better-dns.go
   - GOOS=windows GOARCH=386   go build -o better-dns-x86.exe    better-dns.go
+  - GOOS=darwin  GOARCH=amd64 go build -o better-dns-darwin     better-dns.go
 
   - mkdir -p artifacts
-  - mv better-dns-x86_64.exe artifacts
-  - mv better-dns-x86.exe artifacts
+  - mv better-dns-x86_64.exe better-dns-x86.exe artifacts
+  - mv better-dns-darwin artifacts
 
 deploy:
 
