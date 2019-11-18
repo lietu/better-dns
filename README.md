@@ -47,4 +47,4 @@ You probably have to run it as Administrator so it has enough permissions to edi
 
 Short answer: This software is licensed with the BSD 3-clause -license.
 
-Long answer: The license for this software is in [LICENSE.md](./LICENSE.md), the other pieces of software installed and used have varying other licenses that you need to be separately aware of.
+Long answer: The license for this software is in [LICENSE.md](./LICENSE.md), the libraries used may have varying other licenses that you need to be separately aware of.
