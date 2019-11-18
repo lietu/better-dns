@@ -44,15 +44,6 @@ deploy:
     edge: true
     file: artifacts/*
     skip_cleanup: true
-    draft: true
     overwrite: true
-    on:
-      branch: master
-
-  - provider: releases
-    api_key: $GITHUB_TOKEN
-    edge: true
-    file: artifacts/*
-    skip_cleanup: true
     on:
       tags: true
