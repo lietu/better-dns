@@ -21,28 +21,38 @@ func getResult(req *dns.Msg) *dns.Msg {
 		res = newFilteredResponse(req)
 	} else {
 		res = client.Query(req)
-		setCache(req, res)
+		if res != nil {
+			setCache(req, res)
+		}
 	}
 
 	return res
+}
+
+func writeResponse(w dns.ResponseWriter, res *dns.Msg) {
+	defer func() {
+		if err := recover(); err != nil {
+			log.Errorf("Caught panic in write: %s", err)
+		}
+	}()
+
+	err := w.WriteMsg(res)
+	if err != nil {
+		log.Errorf("Error while responding to request: %s", err)
+	}
 }
 
 func (h *RequestHandler) ServeDNS(w dns.ResponseWriter, req *dns.Msg) {
 	res := getResult(req)
 
 	if res != nil {
-		err := w.WriteMsg(res)
-		if err != nil {
-			log.Errorf("Error while responding to request (cached): %s", err)
-		}
+		writeResponse(w, res)
 	} else {
 		res = new(dns.Msg)
+		res.SetReply(req)
 		res.Rcode = dns.RcodeServerFailure
 
-		err := w.WriteMsg(res)
-		if err != nil {
-			log.Errorf("Error while responding to request (cached): %s", err)
-		}
+		writeResponse(w, res)
 	}
 }
 
