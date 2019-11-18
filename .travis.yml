@@ -24,8 +24,8 @@ install: true
 script:
   # - go test -race -v -bench=. -coverprofile=coverage.txt -covermode=atomic ./...
 
-  - GOOS=windows GOARCH=amd64 go build better-dns.go -o better-dns-x86_64.exe
-  - GOOS=windows GOARCH=386   go build better-dns.go -o better-dns-x86.exe
+  - GOOS=windows GOARCH=amd64 go build -o better-dns-x86_64.exe better-dns.go
+  - GOOS=windows GOARCH=386   go build -o better-dns-x86.exe    better-dns.g   o
 
   - mkdir -p artifacts
   - mv better-dns-x86_64.exe artifacts
