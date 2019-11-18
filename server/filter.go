@@ -76,7 +76,10 @@ func AddBlockedEntry(name string, list string) {
 // Show current log lists
 func LogLists() {
 	log.Info("Blocked entries based on given lists:")
+	var total int64 = 0
 	for key, count := range listEntries {
 		log.Infof(" - %s: %d ⛔ entries", key, count)
+		total += count
 	}
+	log.Infof("Total %d ⛔ entries", total)
 }
