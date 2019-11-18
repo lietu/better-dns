@@ -4,6 +4,10 @@ sudo: false
 go:
   - "1.13"
 
+cache:
+  directories:
+    - $GOPATH/pkg/mod
+
 go_import_path: github.com/lietu/better-dns
 
 env:
@@ -13,6 +17,9 @@ before_install:
   - mkdir -p $GOPATH/src/github.com/lietu/
   # Wtf Travis, is this really necessary?
   - ln -s $GOPATH/src/github.com/lietu/better-dns $TRAVIS_BUILD_DIR
+
+# Skip Travis's automagic failures in dependency resolution
+install: true
 
 script:
   # - go test -race -v -bench=. -coverprofile=coverage.txt -covermode=atomic ./...
