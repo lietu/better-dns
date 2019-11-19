@@ -46,11 +46,11 @@ func UpdateDnsServers() {
 
 func RestoreDnsServers() {
 	for _, iface := range interfaces {
-		cmd := exec.Command("networksetup", "-setdnsservers", iface)
+		cmd := exec.Command("networksetup", "-setdnsservers", iface, "empty")
 		output, err := cmd.CombinedOutput()
 		if err != nil {
 			log.Errorf("Error restoring %s DNS servers: %s", iface, err)
-			log.Errorf("Try manually with: networksetup -setdnsservers %s", iface)
+			log.Errorf("Try manually with: networksetup -setdnsservers %s empty", iface)
 			log.Error(strings.TrimSpace(string(output[:])))
 		} else {
 			log.Debugf("%s now using DNS servers set by DHCP", iface)
