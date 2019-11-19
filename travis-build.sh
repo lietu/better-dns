@@ -72,8 +72,6 @@ for os in $OSES; do
   first=1
 
   for arch in ${ARCHITECTURES[${os}]}; do
-    label "Building for $os $arch target"
-
     export GOOS="$os"
     export GOARCH="$arch"
 
@@ -90,6 +88,8 @@ for os in $OSES; do
       target="$target.exe"
     fi
 
+    label "Building $target for $os $arch"
+    
     cmd go build -o "$target" better-dns.go
     cmd mv "$target" "$ARTIFACTS"
   done
