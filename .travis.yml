@@ -13,9 +13,6 @@ go_import_path: github.com/lietu/better-dns
 git:
   depth: 10
 
-env:
-  - GO111MODULE=on
-
 # Skip Travis's automagic failures in dependency resolution
 install:
   - go get -u honnef.co/go/tools/cmd/staticcheck

@@ -62,6 +62,7 @@ function cmd() {
 
 # ----- END FUNCTIONS ----- #
 
+GO111MODULE=on
 CGO_ENABLED=0
 ARTIFACTS="$PWD/artifacts"
 mkdir -p "$ARTIFACTS"
@@ -69,7 +70,7 @@ mkdir -p "$ARTIFACTS"
 for os in $OSES; do
   big_label "$os"
 
-  GOOS="$os"
+  export GOOS="$os"
 
   cmd go vet . ./client ./server ./shared
   cmd staticcheck . ./client ./server ./shared
@@ -79,7 +80,7 @@ for os in $OSES; do
   for arch in ${ARCHITECTURES[${os}]}; do
     label "Building for $os $arch target"
 
-    GOARCH="$arch"
+    export GOARCH="$arch"
 
     target="better-dns-$os-$arch"
 
