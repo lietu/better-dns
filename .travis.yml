@@ -23,19 +23,7 @@ install:
   - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.21.0
 
 script:
-  # - go test -race -v -bench=. -coverprofile=coverage.txt -covermode=atomic ./...
-  - go vet . ./client ./server ./shared | true
-  - staticcheck . ./client ./server ./shared | true
-  - errcheck . ./client ./server ./shared | true
-  - golangci-lint run . ./client ./server ./shared | true
-
-  - GOOS=windows GOARCH=amd64 go build -o better-dns-x86_64.exe better-dns.go
-  - GOOS=windows GOARCH=386   go build -o better-dns-x86.exe    better-dns.go
-  - GOOS=darwin  GOARCH=amd64 go build -o better-dns-darwin     better-dns.go
-
-  - mkdir -p artifacts
-  - mv better-dns-x86_64.exe better-dns-x86.exe artifacts
-  - mv better-dns-darwin artifacts
+  - bash travis-build.sh
 
 deploy:
   - provider: releases
