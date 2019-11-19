@@ -69,21 +69,23 @@ mkdir -p "$ARTIFACTS"
 
 for os in $OSES; do
   big_label "$os"
-
-  export GOOS="$os"
-
-  cmd go vet . ./client ./server ./shared
-  cmd staticcheck . ./client ./server ./shared
-  cmd errcheck . ./client ./server ./shared
-  cmd golangci-lint run . ./client ./server ./shared
+  first=1
 
   for arch in ${ARCHITECTURES[${os}]}; do
     label "Building for $os $arch target"
 
+    export GOOS="$os"
     export GOARCH="$arch"
 
-    target="better-dns-$os-$arch"
+    if [[ "$first" == "1" ]]; then
+      cmd go vet . ./client ./server ./shared
+      cmd staticcheck . ./client ./server ./shared
+      cmd errcheck . ./client ./server ./shared
+      cmd golangci-lint run . ./client ./server ./shared
+      first=0
+    fi
 
+    target="better-dns-$os-$arch"
     if [[ "$os" == "windows" ]]; then
       target="$target.exe"
     fi
