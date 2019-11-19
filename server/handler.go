@@ -32,7 +32,7 @@ func getResult(req *dns.Msg) *dns.Msg {
 func writeResponse(w dns.ResponseWriter, res *dns.Msg) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Errorf("Caught panic in write: %s", err)
+			log.Errorf("Caught panic while responding to request: %s", err)
 		}
 	}()
 

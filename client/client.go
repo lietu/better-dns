@@ -11,7 +11,7 @@ import (
 var client *dns.Client
 
 // Do a DNS query for the given request
-func Query(req *dns.Msg) (res *dns.Msg) {
+func Query(req *dns.Msg) *dns.Msg {
 	// TODO: Parallelization of multiple queries
 	// TODO: Configuration
 
@@ -44,9 +44,9 @@ func Query(req *dns.Msg) (res *dns.Msg) {
 			}
 		} else {
 			go shared.ReportSuccess(req, res, rtt)
-			break
+			return res
 		}
 	}
 
-	return res
+	return nil
 }
