@@ -1,15 +1,11 @@
 #!/usr/bin/env bash
 
-OSES="darwin dragonfly freebsd linux netbsd openbsd solaris windows"
+OSES="darwin linux windows"
+# In future maybe: dragonfly freebsd netbsd openbsd solaris
 
 declare -A ARCHITECTURES
 ARCHITECTURES["darwin"]="amd64"
-ARCHITECTURES["dragonfly"]="amd64 386"
-ARCHITECTURES["freebsd"]="amd64 386"
 ARCHITECTURES["linux"]="amd64 386 arm arm64"
-ARCHITECTURES["netbsd"]="amd64 386"
-ARCHITECTURES["openbsd"]="amd64 386"
-ARCHITECTURES["solaris"]="amd64 386"
 ARCHITECTURES["windows"]="amd64 386"
 
 # ----- END CONFIGURATION ----- #
