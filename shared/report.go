@@ -9,27 +9,27 @@ import (
 
 func answerResult(a dns.RR) string {
 	if a, ok := a.(*dns.A); ok {
-		return fmt.Sprintf("%s", a.A)
+		return a.A.String()
 	}
 
 	if a, ok := a.(*dns.AAAA); ok {
-		return fmt.Sprintf("%s", a.AAAA)
+		return a.AAAA.String()
 	}
 
 	if a, ok := a.(*dns.MX); ok {
-		return fmt.Sprintf("%s", a.Mx)
+		return a.Mx
 	}
 
 	if a, ok := a.(*dns.NS); ok {
-		return fmt.Sprintf("%s", a.Ns)
+		return a.Ns
 	}
 
 	if a, ok := a.(*dns.PTR); ok {
-		return fmt.Sprintf("%s", a.Ptr)
+		return a.Ptr
 	}
 
 	if a, ok := a.(*dns.CNAME); ok {
-		return fmt.Sprintf("%s", a.Target)
+		return a.Target
 	}
 
 	return fmt.Sprintf("unknown (%T)", a)
