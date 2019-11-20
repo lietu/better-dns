@@ -11,7 +11,8 @@ type RequestHandler struct {
 }
 
 func getResult(req *dns.Msg) *dns.Msg {
-	if cached := cache(req); cached != nil {
+	if cached := getCache(req); cached != nil {
+		go shared.ReportCached(req, cached)
 		return cached
 	}
 
@@ -22,6 +23,7 @@ func getResult(req *dns.Msg) *dns.Msg {
 	} else {
 		res = client.Query(req)
 		if res != nil {
+			// TODO: Check for blocked results in reply in case of CNAME entries
 			setCache(req, res)
 		}
 	}
@@ -43,6 +45,15 @@ func writeResponse(w dns.ResponseWriter, res *dns.Msg) {
 }
 
 func (h *RequestHandler) ServeDNS(w dns.ResponseWriter, req *dns.Msg) {
+	defer func() {
+		if err := recover(); err != nil {
+			// Unknown panic, should probably recover DNS settings and crash
+			log.Errorf("Caught panic %s - exiting...", err)
+			shared.RestoreDnsServers()
+			panic(err)
+		}
+	}()
+
 	res := getResult(req)
 
 	if res != nil {

@@ -40,9 +40,9 @@ func UpdateDnsServers() {
 		go func(iface string) {
 			cmd := exec.Command("networksetup", "-setdnsservers", iface, "127.0.0.1")
 			output, err := cmd.CombinedOutput()
-			log.Error(strings.TrimSpace(string(output[:])))
 			if err != nil {
 				log.Errorf("Error setting %s DNS servers: %s", iface, err)
+				log.Errorf("Output was: %s", string(output[:]))
 			} else {
 				log.Debugf("%s now using 127.0.0.1 for DNS", iface)
 			}

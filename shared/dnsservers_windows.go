@@ -55,7 +55,7 @@ func UpdateDnsServers() {
 			output, err := cmd.CombinedOutput()
 			if err != nil {
 				log.Errorf("Error setting %s DNS servers: %s", iface, err)
-				log.Errorf("Output was: %s", output)
+				log.Errorf("Output was: %s", string(output[:]))
 			} else {
 				log.Debugf("%s now using 127.0.0.1 for DNS", iface)
 			}

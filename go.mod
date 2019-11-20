@@ -3,6 +3,7 @@ module github.com/lietu/better-dns
 go 1.13
 
 require (
+	github.com/hashicorp/golang-lru v0.5.3
 	github.com/kisielk/errcheck v1.2.0 // indirect
 	github.com/mattn/go-colorable v0.1.4
 	github.com/miekg/dns v1.1.22

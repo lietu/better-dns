@@ -1,3 +1,6 @@
+# github.com/hashicorp/golang-lru v0.5.3
+github.com/hashicorp/golang-lru
+github.com/hashicorp/golang-lru/simplelru
 # github.com/konsorten/go-windows-terminal-sequences v1.0.1
 github.com/konsorten/go-windows-terminal-sequences
 # github.com/mattn/go-colorable v0.1.4
