@@ -4,6 +4,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"os/exec"
 	"strings"
+	"sync"
 )
 
 var interfaces = []string{}

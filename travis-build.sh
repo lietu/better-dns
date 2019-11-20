@@ -62,6 +62,8 @@ function cmd() {
 
 # ----- END FUNCTIONS ----- #
 
+set -e
+
 GO111MODULE=on
 CGO_ENABLED=0
 ARTIFACTS="$PWD/artifacts"
