@@ -5,10 +5,12 @@ import (
 	"github.com/miekg/dns"
 	log "github.com/sirupsen/logrus"
 	"net"
+	"sync"
 )
 
 var blockedEntries = map[string]*shared.BlockEntry{}
 var listEntries = map[string]int64{}
+var blockListMutex = &sync.Mutex{}
 
 func filter(req *dns.Msg) *shared.BlockEntry {
 	question := req.Question[0]
@@ -62,6 +64,10 @@ func AddBlockedEntry(name string, list string) {
 	if name[len(name)-1:] != "." {
 		name = name + "."
 	}
+
+	// Called from multiple goroutines so making the map and list processing safe
+	blockListMutex.Lock()
+	defer blockListMutex.Unlock()
 
 	blockedEntries[name] = &shared.BlockEntry{Src: list}
 

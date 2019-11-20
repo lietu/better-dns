@@ -12,6 +12,7 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
+	"sync"
 	"syscall"
 	"time"
 )
@@ -91,9 +92,16 @@ func loadLists() {
 		"https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext",
 	}
 
+	wg := &sync.WaitGroup{}
 	for i := range urls {
-		blockFromURL(urls[i])
+		wg.Add(1)
+		go func(url string) {
+			blockFromURL(url)
+			wg.Done()
+		}(urls[i])
 	}
+
+	wg.Wait()
 
 	server.LogLists()
 }

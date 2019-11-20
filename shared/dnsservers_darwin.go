@@ -21,7 +21,7 @@ func RememberDnsServers() {
 	for _, line := range lines {
 		line := strings.TrimSpace(line)
 
-		// Configuration for interface "Local Area Connection* 1"
+		// Hardware Port: Ethernet
 		if strings.HasPrefix(line, "Hardware Port: ") {
 			parts := strings.SplitN(line, ": ", 2)
 			interfaces = append(interfaces, parts[1])
@@ -32,28 +32,44 @@ func RememberDnsServers() {
 }
 
 func UpdateDnsServers() {
+	wg := &sync.WaitGroup{}
 	for _, iface := range interfaces {
-		cmd := exec.Command("networksetup", "-setdnsservers", iface, "127.0.0.1")
-		output, err := cmd.CombinedOutput()
-		log.Error(strings.TrimSpace(string(output[:])))
-		if err != nil {
-			log.Errorf("Error setting %s DNS servers: %s", iface, err)
-		} else {
-			log.Debugf("%s now using 127.0.0.1 for DNS", iface)
-		}
+		wg.Add(1)
+
+		go func(iface string) {
+			cmd := exec.Command("networksetup", "-setdnsservers", iface, "127.0.0.1")
+			output, err := cmd.CombinedOutput()
+			log.Error(strings.TrimSpace(string(output[:])))
+			if err != nil {
+				log.Errorf("Error setting %s DNS servers: %s", iface, err)
+			} else {
+				log.Debugf("%s now using 127.0.0.1 for DNS", iface)
+			}
+			wg.Done()
+		}(iface)
 	}
+
+	wg.Wait()
 }
 
 func RestoreDnsServers() {
+	wg := &sync.WaitGroup{}
 	for _, iface := range interfaces {
-		cmd := exec.Command("networksetup", "-setdnsservers", iface, "empty")
-		output, err := cmd.CombinedOutput()
-		if err != nil {
-			log.Errorf("Error restoring %s DNS servers: %s", iface, err)
-			log.Errorf("Try manually with: networksetup -setdnsservers %s empty", iface)
-			log.Error(strings.TrimSpace(string(output[:])))
-		} else {
-			log.Debugf("%s now using DNS servers set by DHCP", iface)
-		}
+		wg.Add(1)
+
+		go func(iface string) {
+			cmd := exec.Command("networksetup", "-setdnsservers", iface, "empty")
+			output, err := cmd.CombinedOutput()
+			if err != nil {
+				log.Errorf("Error restoring %s DNS servers: %s", iface, err)
+				log.Errorf("Try manually with: networksetup -setdnsservers %s empty", iface)
+				log.Error(strings.TrimSpace(string(output[:])))
+			} else {
+				log.Debugf("%s now using DNS servers set by DHCP", iface)
+			}
+			wg.Done()
+		}(iface)
 	}
+
+	wg.Wait()
 }
