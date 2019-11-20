@@ -70,7 +70,7 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration) {
 
 		extra := ""
 		if answers > 1 {
-			extra = fmt.Sprintf(" (and %d more)", answers - 1)
+			extra = fmt.Sprintf(" (and %d more)", answers-1)
 		}
 
 		log.Debugf("✔ %s %s-record resolved to %s%s (%s) TTL %s", name, t, result, extra, rtt, ttl)
@@ -96,7 +96,7 @@ func ReportCached(req *dns.Msg, res *dns.Msg) {
 
 	extra := ""
 	if answers > 1 {
-		extra = fmt.Sprintf(" (and %d more)", answers - 1)
+		extra = fmt.Sprintf(" (and %d more)", answers-1)
 	}
 
 	log.Debugf("✔ %s %s-record resolved to %s%s (cached)", name, t, result, extra)
