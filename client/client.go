@@ -31,7 +31,7 @@ func Query(req *dns.Msg) *dns.Msg {
 		res, rtt, err := client.Exchange(req, server)
 
 		if err != nil {
-			go shared.ReportError(req, res, rtt)
+			go shared.ReportError(req, res, rtt, err)
 
 			if err.Error() == "tls: DialWithDialer timed out" {
 				log.Infof("TLS connection timed out.")

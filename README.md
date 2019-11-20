@@ -16,16 +16,18 @@ What it can do:
  - Block A & AAAA record resolution of addresses on those lists
  - Proxy any non-blacklisted DNS requests to a proper DNS server
  - Supports DNS-over-TLS with e.g. Cloudflare's `1.1.1.1:853` to avoid snooping
+ - Caches requests (minimum 30s, otherwise respects TTL in responses)
  - Override your active DNS servers while it's running and return them to normal on exit
  - Show all the DNS requests your software is doing - maybe you'll find it enlightening
+ - Supports Windows, Mac, and Linux (at least based on limited testing)
  
 What it can't do:
 
  - Protect other devices in your network, use [Pi-hole](https://pi-hole.net) for that
 
-Current version is very preliminary, everything from blocklists to DNS servers is hard-coded. However, it seems to very much work (on Windows 10).
+Current version is very preliminary, everything from blocklists to DNS servers is hard-coded. However, it seems to very much work (on Windows 10, Mac OS High Sierra, and Fedora 31 armhfp on Raspberry Pi 2).
 
-You probably have to run it as Administrator so it has enough permissions to edit your DNS server configuration.
+You probably have to run it as Administrator/root so it has enough permissions to edit your DNS server configuration and listen to port 53 TCP & UDP, as these are privileged service ports.
 
 
 ## Future ideas
@@ -33,7 +35,7 @@ You probably have to run it as Administrator so it has enough permissions to edi
  - Performing DNS requests to multiple servers in parallel
  - Running as a service
  - Installers or similar
- - Support for Linux, Mac, maybe others (should be pretty easy to add)
+ - Support for more OSes (should be pretty easy to add, would like to see BSDs at least supported in the near future, and specifically router software like pfSense supported)
  - Wide configuration options for e.g. DNS servers to use (UDP, TCP, DNS-over-TLS), interfaces to ignore, block lists, and custom blacklists
  - Cached block lists in case your network isn't working perfectly when you launch the software
  - Periodically checking the lists for updates (e.g. hourly / daily)

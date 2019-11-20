@@ -35,7 +35,7 @@ func answerResult(a dns.RR) string {
 	return fmt.Sprintf("unknown (%T)", a)
 }
 
-func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration) {
+func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration, err error) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("Suppressing panic during ReportError: %s", err)
@@ -43,7 +43,12 @@ func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration) {
 	}()
 
 	q := req.Question[0]
-	c := dns.RcodeToString[res.Rcode]
+	c := "nil"
+	if res != nil {
+		c = dns.RcodeToString[res.Rcode]
+	} else if err != nil {
+		c = fmt.Sprintf("error: %s", err)
+	}
 	log.Debugf("❌ Failed to resolve %s %s-record (%s) %s", q.Name, dns.TypeToString[q.Qtype], rtt, c)
 }
 
@@ -55,7 +60,7 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration) {
 	}()
 
 	if res.Rcode == dns.RcodeNameError {
-		ReportError(req, res, rtt)
+		ReportError(req, res, rtt, nil)
 		return
 	}
 
