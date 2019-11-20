@@ -21,10 +21,12 @@ install:
 
 script:
   - bash travis-build.sh
+  - export BODY=$(cat DESCRIPTION)
 
 deploy:
   - provider: releases
     api_key: $GITHUB_TOKEN
+    body: ${BODY}
     edge: true
     file: artifacts/*
     skip_cleanup: true

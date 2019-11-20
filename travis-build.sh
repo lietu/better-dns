@@ -96,3 +96,11 @@ for os in $OSES; do
     cmd mv "$target" "$ARTIFACTS"
   done
 done
+
+cd "$ARTIFACTS"
+sha256sum ./* > SHA256SUMS
+cd -
+
+git log -1 --pretty=%B > DESCRIPTION
+echo >> DESCRIPTION
+cat "$ARTIFACTS/SHA256SUMS" >> DESCRIPTION
