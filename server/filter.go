@@ -148,7 +148,7 @@ func BlockFromURL(listURL string) {
 		log.Errorf("Error while processing list %s: %s", listURL, err)
 	}
 
-	log.Infof("✔ Parsed %s list in %s", listURL, time.Since(start))
+	log.Infof("✔ Parsed %s list in %s", listURL, shared.CleanDuration(time.Since(start)))
 }
 
 // Show current log lists

@@ -49,7 +49,7 @@ func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration, err error) {
 	} else if err != nil {
 		c = fmt.Sprintf("error: %s", err)
 	}
-	log.Debugf("❌ Failed to resolve %s %s-record (%s) %s", q.Name, dns.TypeToString[q.Qtype], rtt, c)
+	log.Debugf("❌ Failed to resolve %s %s-record (%s) %s", q.Name, dns.TypeToString[q.Qtype], CleanDuration(rtt), c)
 }
 
 func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string) {
@@ -80,7 +80,7 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 			extra = fmt.Sprintf(" (and %d more)", answers-1)
 		}
 
-		log.Debugf("✔ %s %s-record resolved to %s%s (%s) TTL %s", name, t, result, extra, rtt, ttl)
+		log.Debugf("✔ %s %s-record resolved to %s%s (%s) TTL %s", name, t, result, extra, CleanDuration(rtt), CleanDuration(ttl))
 	}
 }
 
@@ -118,4 +118,8 @@ func ReportFiltered(req *dns.Msg, be *BlockEntry) {
 
 	name := req.Question[0].Name
 	log.Debugf("⛔ %s blocked from %s", name, be.Src)
+}
+
+func CleanDuration(d time.Duration) time.Duration {
+	return d.Truncate(time.Millisecond)
 }
