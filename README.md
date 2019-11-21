@@ -3,21 +3,21 @@
 
 # Better DNS
 
-Local DNS based ad (etc) blocker inspired by [Pi-hole](https://pi-hole.net).
+Local DNS based ad (etc) blocker, privacy enhancer, and performance optimizer, partially inspired by [Pi-hole](https://pi-hole.net).
 
 ![Better DNS in action](./better-dns.gif)
 
 What it can do:
 
+ - Supports [DNS over TLS](https://en.wikipedia.org/wiki/DNS_over_TLS) and [DNS over HTTPS](https://en.wikipedia.org/wiki/DNS_over_HTTPS) (using the DNS UDP wire protocol) servers with e.g. [Cloudflare](https://developers.cloudflare.com/1.1.1.1/dns-over-https/) to avoid snooping, as well as plain old insecure DNS (but why would you want to use it?)
  - Run locally, no need to host servers of any kind, but you can also run it on a server
  - Protect you in every network you're connected to
  - Block (many) ads (and other unwanted things) in pretty much all programs you use (unless they use some custom DNS setup, which is not very common)
- - Parse common block lists from HTTP(S) urls
- - Support a custom blacklist as well
+ - Parse common block lists from HTTP(S) urls (`/etc/hosts` format, and one host per line)
+ - Support a custom blacklist as well with `*` wildcard support
  - Block A & AAAA record resolution of addresses on those lists
- - Performs DNS requests to multiple servers in parallel and uses fastest successful response
+ - Performs DNS requests to multiple servers in parallel and returns fastest successful response
  - Proxy any non-blacklisted DNS requests to a proper DNS server
- - Supports [DNS over TLS](https://en.wikipedia.org/wiki/DNS_over_TLS) and [DNS over HTTPS](https://en.wikipedia.org/wiki/DNS_over_HTTPS) (using the DNS UDP wire protocol) with e.g. [Cloudflare](https://developers.cloudflare.com/1.1.1.1/dns-over-https/) to avoid snooping, as well as plain old insecure DNS (but why would you want to use it?)
  - Caches results (minimum 30s, otherwise respects TTL in responses, using a fixed-size LRU) - leads to a minor performance enhancement in some scenarios
  - Override your active DNS servers while it's running and return them to normal on exit
  - Show all the DNS requests your software is doing - maybe you'll find it enlightening
