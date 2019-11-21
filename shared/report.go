@@ -52,7 +52,7 @@ func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration, err error) {
 	log.Debugf("❌ Failed to resolve %s %s-record (%s) %s", q.Name, dns.TypeToString[q.Qtype], rtt, c)
 }
 
-func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration) {
+func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string) {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("Suppressing panic during ReportSuccess: %s", err)
@@ -63,6 +63,8 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration) {
 		ReportError(req, res, rtt, nil)
 		return
 	}
+
+	// TODO: Track per-server stats
 
 	answers := len(res.Answer)
 	if answers > 0 {
@@ -115,5 +117,5 @@ func ReportFiltered(req *dns.Msg, be *BlockEntry) {
 	}()
 
 	name := req.Question[0].Name
-	log.Debugf("⛔ %s blocked by %s list", name, be.Src)
+	log.Debugf("⛔ %s blocked from %s", name, be.Src)
 }

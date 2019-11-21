@@ -8,27 +8,7 @@ import (
 )
 
 type RequestHandler struct {
-}
-
-func getResult(req *dns.Msg) *dns.Msg {
-	if cached := getCache(req); cached != nil {
-		go shared.ReportCached(req, cached)
-		return cached
-	}
-
-	var res *dns.Msg
-	if filtered := filter(req); filtered != nil {
-		go shared.ReportFiltered(req, filtered)
-		res = newFilteredResponse(req)
-	} else {
-		res = client.Query(req)
-		if res != nil {
-			// TODO: Check for blocked results in reply in case of CNAME entries
-			setCache(req, res)
-		}
-	}
-
-	return res
+	Config *shared.Config
 }
 
 func writeResponse(w dns.ResponseWriter, res *dns.Msg) {
@@ -44,6 +24,27 @@ func writeResponse(w dns.ResponseWriter, res *dns.Msg) {
 	}
 }
 
+func (h *RequestHandler) getResult(req *dns.Msg) *dns.Msg {
+	if cached := getCache(req); cached != nil {
+		go shared.ReportCached(req, cached)
+		return cached
+	}
+
+	var res *dns.Msg
+	if filtered := filter(req, h.Config.GetBlacklist()); filtered != nil {
+		go shared.ReportFiltered(req, filtered)
+		res = newFilteredResponse(req)
+	} else {
+		res = client.Query(req, h.Config.GetDnsServers())
+		if res != nil {
+			// TODO: Check for blocked results in reply in case of CNAME entries
+			setCache(req, res)
+		}
+	}
+
+	return res
+}
+
 func (h *RequestHandler) ServeDNS(w dns.ResponseWriter, req *dns.Msg) {
 	defer func() {
 		if err := recover(); err != nil {
@@ -54,7 +55,7 @@ func (h *RequestHandler) ServeDNS(w dns.ResponseWriter, req *dns.Msg) {
 		}
 	}()
 
-	res := getResult(req)
+	res := h.getResult(req)
 
 	if res != nil {
 		writeResponse(w, res)
@@ -68,7 +69,9 @@ func (h *RequestHandler) ServeDNS(w dns.ResponseWriter, req *dns.Msg) {
 }
 
 // Return a request handler for the DNS server
-func NewHandler() *RequestHandler {
-	h := &RequestHandler{}
+func NewHandler(c *shared.Config) *RequestHandler {
+	h := &RequestHandler{
+		Config: c,
+	}
 	return h
 }
