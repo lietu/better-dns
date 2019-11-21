@@ -13,7 +13,7 @@ import (
 	"time"
 )
 
-var DnsOverHttpsRequestError = errors.New("DNS-over-HTTPS server did not respond with 200 OK")
+var ErrDnsOverHttpsRequest = errors.New("DNS-over-HTTPS server did not respond with 200 OK")
 
 type queryResult struct {
 	res    *dns.Msg
@@ -170,7 +170,7 @@ func queryDnsOverHttps(req *dns.Msg, serverUrl string) queryResult {
 			} else {
 				msg, _ := ioutil.ReadAll(httpRes.Body)
 				log.Errorf("HTTP response %d %s: %s", httpRes.StatusCode, httpRes.Status, string(msg[:]))
-				err = DnsOverHttpsRequestError
+				err = ErrDnsOverHttpsRequest
 				go shared.ReportError(req, res, rtt, err)
 				continue
 			}
