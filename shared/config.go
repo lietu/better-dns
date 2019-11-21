@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"os"
 	"strings"
-	"sync"
 )
 
 type Config struct {
@@ -14,7 +13,6 @@ type Config struct {
 	Blacklist  []string `yaml:"blacklist"`
 	DnsServers []string `yaml:"dns_servers"`
 	ListenHost string   `yaml:"listen_host"`
-	mutex      sync.Mutex
 }
 
 // Some sensible lists that seem to cause little to no problems
