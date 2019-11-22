@@ -46,6 +46,7 @@ func main() {
 	// Check what config file we're supposed to be using
 	flag.Parse()
 	configFile := *configFileArg
+	usingDefault := configFile == DEFAULT_CONFIG
 
 	// Process "home directory" in cross-platform manner
 	if strings.HasPrefix(configFile, "~/") {
@@ -58,9 +59,9 @@ func main() {
 	}
 
 	// Read config (if it exists)
-	usingDefault := configFile == DEFAULT_CONFIG
 	config := shared.NewConfig(configFile, usingDefault)
 
+	// Set log level
 	level, err := log.ParseLevel(config.LogLevel)
 	if err != nil {
 		log.Fatalf("Invalid log level %s: %s", config.LogLevel, err)
@@ -90,19 +91,25 @@ func main() {
 	}()
 
 	go func() {
-		duration := time.Minute
+		duration := time.Hour
 		start := time.Now()
 		previous := stats.Stats{}
 		for {
 			time.Sleep(duration)
 			total := stats.GetStats()
 			successes := total.Successes - previous.Successes
+
+			rtt := time.Duration(0)
+			if successes > 0 {
+				rtt = total.Rtt / time.Duration(successes)
+			}
+
 			diff := stats.Stats{
 				Blocked:   total.Blocked - previous.Blocked,
 				Cached:    total.Cached - previous.Cached,
 				Errors:    total.Errors - previous.Errors,
 				Successes: successes,
-				Rtt:       total.Rtt / time.Duration(successes),
+				Rtt:       rtt,
 			}
 
 			saved := (time.Duration(diff.Cached) * diff.Rtt).Truncate(time.Millisecond)
