@@ -38,7 +38,8 @@ func loadLists(urls []string) {
 
 func main() {
 	log.SetLevel(log.DebugLevel)
-	log.SetFormatter(&log.TextFormatter{ForceColors: true})
+	formatter := &log.TextFormatter{ForceColors: true, DisableTimestamp: true}
+	log.SetFormatter(formatter)
 	log.SetOutput(colorable.NewColorableStdout())
 
 	// Check what config file we're supposed to be using

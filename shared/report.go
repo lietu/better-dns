@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/miekg/dns"
 	log "github.com/sirupsen/logrus"
+	"sort"
 	"time"
 )
 
@@ -49,7 +50,7 @@ func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration, err error) {
 	} else if err != nil {
 		c = fmt.Sprintf("error: %s", err)
 	}
-	log.Debugf("❌ Failed to resolve %s %s-record (%s) %s", q.Name, dns.TypeToString[q.Qtype], CleanDuration(rtt), c)
+	log.Debugf("❌ %s (%s) not resolved (%s) %s", CleanName(q.Name), dns.TypeToString[q.Qtype], CleanDuration(rtt), c)
 }
 
 func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string) {
@@ -64,24 +65,53 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 		return
 	}
 
+	answers := len(res.Answer)
+	if answers == 0 {
+		return
+	}
+
 	// TODO: Track per-server stats
 
-	answers := len(res.Answer)
-	if answers > 0 {
-		q := req.Question[0]
-		t := dns.TypeToString[q.Qtype]
-		name := q.Name
-		ans := res.Answer[0]
-		result := answerResult(ans)
-		ttl := time.Second * time.Duration(ans.Header().Ttl)
+	var ttl time.Duration = 0
+	q := req.Question[0]
+	t := dns.TypeToString[q.Qtype]
+	name := q.Name
 
-		extra := ""
-		if answers > 1 {
-			extra = fmt.Sprintf(" (and %d more)", answers-1)
+	answerList := []dns.RR{}
+	for _, a := range res.Answer {
+		answerList = append(answerList, a)
+	}
+
+	// Sort A records first, then AAAA, then rest
+	sort.Slice(answerList[:], func(i, j int) bool {
+		first := answerList[i]
+		second := answerList[j]
+
+		_, firstA := first.(*dns.A)
+		_, firstAAAA := first.(*dns.AAAA)
+		_, secondA := second.(*dns.A)
+		_, secondAAAA := second.(*dns.AAAA)
+
+		if firstA {
+			return true
+		} else if secondA {
+			return false
+		} else if firstAAAA {
+			return true
+		} else if secondAAAA {
+			return false
 		}
 
-		log.Debugf("✔ %s %s-record resolved to %s%s (%s) TTL %s", name, t, result, extra, CleanDuration(rtt), CleanDuration(ttl))
-	}
+		return false // Doesn't really matter
+	})
+
+	extra := ""
+	ans := answerList[0]
+	ttl = time.Second * time.Duration(ans.Header().Ttl)
+	extra = fmt.Sprintf(" (+%d more)", answers-1)
+	result := answerResult(ans)
+
+	log.Debugf("✔ %s (%s) is %s%s for %s (%s)", CleanName(name), t, result, extra, CleanDuration(ttl), CleanDuration(rtt))
 }
 
 func ReportCached(req *dns.Msg, res *dns.Msg) {
@@ -103,10 +133,10 @@ func ReportCached(req *dns.Msg, res *dns.Msg) {
 
 	extra := ""
 	if answers > 1 {
-		extra = fmt.Sprintf(" (and %d more)", answers-1)
+		extra = fmt.Sprintf(" (+%d more)", answers-1)
 	}
 
-	log.Debugf("✔ %s %s-record resolved to %s%s (cached)", name, t, result, extra)
+	log.Debugf("✔ %s (%s) is %s%s (cached)", CleanName(name), t, result, extra)
 }
 
 func ReportFiltered(req *dns.Msg, be *BlockEntry) {
@@ -117,9 +147,13 @@ func ReportFiltered(req *dns.Msg, be *BlockEntry) {
 	}()
 
 	name := req.Question[0].Name
-	log.Debugf("⛔ %s blocked from %s", name, be.Src)
+	log.Debugf("⛔ %s blocked by %s", CleanName(name), be.Src)
 }
 
 func CleanDuration(d time.Duration) time.Duration {
 	return d.Truncate(time.Millisecond)
+}
+
+func CleanName(name string) string {
+	return name[0 : len(name)-1]
 }
