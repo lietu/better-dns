@@ -78,9 +78,7 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 	name := q.Name
 
 	answerList := []dns.RR{}
-	for _, a := range res.Answer {
-		answerList = append(answerList, a)
-	}
+	answerList = append(answerList, res.Answer...)
 
 	// Sort A records first, then AAAA, then rest
 	sort.Slice(answerList[:], func(i, j int) bool {
