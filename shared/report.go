@@ -72,7 +72,6 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 
 	// TODO: Track per-server stats
 
-	var ttl time.Duration = 0
 	q := req.Question[0]
 	t := dns.TypeToString[q.Qtype]
 	name := q.Name
@@ -105,7 +104,7 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 
 	extra := ""
 	ans := answerList[0]
-	ttl = time.Second * time.Duration(ans.Header().Ttl)
+	ttl := time.Second * time.Duration(ans.Header().Ttl)
 	extra = fmt.Sprintf(" (+%d more)", answers-1)
 	result := answerResult(ans)
 
