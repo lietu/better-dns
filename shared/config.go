@@ -13,6 +13,7 @@ type Config struct {
 	Blacklist  []string `yaml:"blacklist"`
 	DnsServers []string `yaml:"dns_servers"`
 	ListenHost string   `yaml:"listen_host"`
+	LogLevel string	 	`yaml:"log_level"`
 }
 
 // Some sensible lists that seem to cause little to no problems
@@ -84,6 +85,7 @@ func NewConfig(src string, usingDefault bool) *Config {
 		Blacklist:  defaultBlacklist,
 		DnsServers: defaultDnsServers,
 		ListenHost: "127.0.0.1",
+		LogLevel: "info",
 	}
 
 	if _, err := os.Stat(src); os.IsNotExist(err) {

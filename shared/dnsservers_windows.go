@@ -40,7 +40,7 @@ func RememberDnsServers() {
 		}
 	}
 
-	log.Debugf("Interfaces currently using DNS servers from DHCP: %s", strings.Join(interfaces, ", "))
+	log.Infof("Interfaces currently using DNS servers from DHCP: %s", strings.Join(interfaces, ", "))
 }
 
 func UpdateDnsServers() {
@@ -57,7 +57,7 @@ func UpdateDnsServers() {
 				log.Errorf("Error setting %s DNS servers: %s", iface, err)
 				log.Errorf("Output was: %s", string(output[:]))
 			} else {
-				log.Debugf("%s now using 127.0.0.1 for DNS", iface)
+				log.Infof("%s now using Better DNS", iface)
 			}
 			wg.Done()
 		}(iface)
@@ -81,7 +81,7 @@ func RestoreDnsServers() {
 				log.Errorf("Try manually with: netsh interface ipv4 set dnsservers name=%s source=dhcp", iface)
 				log.Error(strings.TrimSpace(string(output[:])))
 			} else {
-				log.Debugf("%s now using DNS servers set by DHCP", iface)
+				log.Infof("%s now using DNS servers set by DHCP", iface)
 			}
 			wg.Done()
 		}(iface)

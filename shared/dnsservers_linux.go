@@ -29,6 +29,7 @@ func UpdateDnsServers() {
 	if err != nil {
 		log.Errorf("Could not update /etc/resolv.conf: %s", err)
 	}
+	log.Infof("Now using Better DNS")
 }
 
 func RestoreDnsServers() {
@@ -37,4 +38,5 @@ func RestoreDnsServers() {
 	if err != nil {
 		log.Errorf("Could not update /etc/resolv.conf: %s", err)
 	}
+	log.Infof("Restored original DNS settings")
 }

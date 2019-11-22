@@ -37,7 +37,6 @@ func loadLists(urls []string) {
 }
 
 func main() {
-	log.SetLevel(log.DebugLevel)
 	formatter := &log.TextFormatter{ForceColors: true, DisableTimestamp: true}
 	log.SetFormatter(formatter)
 	log.SetOutput(colorable.NewColorableStdout())
@@ -47,18 +46,24 @@ func main() {
 	configFile := *configFileArg
 
 	// Process "home directory" in cross-platform manner
-	if strings.HasPrefix("~/", configFile) {
+	if strings.HasPrefix(configFile, "~/") {
 		usr, err := user.Current()
 		if err != nil {
 			log.Fatalf("Could not resolve user: %s", err)
 		}
 
-		configFile = path.Join(usr.HomeDir, strings.TrimPrefix("~/", configFile))
+		configFile = path.Join(usr.HomeDir, strings.TrimPrefix(configFile, "~/"))
 	}
 
 	// Read config (if it exists)
 	usingDefault := configFile == DEFAULT_CONFIG
 	config := shared.NewConfig(configFile, usingDefault)
+
+	level, err := log.ParseLevel(config.LogLevel)
+	if err != nil {
+		log.Fatalf("Invalid log level %s: %s", config.LogLevel, err)
+	}
+	log.SetLevel(level)
 
 	shared.RememberDnsServers()
 	loadLists(config.BlockLists)
