@@ -3,6 +3,7 @@ package server
 import (
 	"github.com/lietu/better-dns/client"
 	"github.com/lietu/better-dns/shared"
+	"github.com/lietu/better-dns/stats"
 	"github.com/miekg/dns"
 	log "github.com/sirupsen/logrus"
 )
@@ -26,13 +27,13 @@ func writeResponse(w dns.ResponseWriter, res *dns.Msg) {
 
 func (h *RequestHandler) getResult(req *dns.Msg) *dns.Msg {
 	if cached := getCache(req); cached != nil {
-		go shared.ReportCached(req, cached)
+		go stats.ReportCached(req, cached)
 		return cached
 	}
 
 	var res *dns.Msg
 	if filtered := filter(req, h.Config.GetBlacklist()); filtered != nil {
-		go shared.ReportFiltered(req, filtered)
+		go stats.ReportBlocked(req, filtered)
 		res = newFilteredResponse(req)
 	} else {
 		res = client.Query(req, h.Config.GetDnsServers())

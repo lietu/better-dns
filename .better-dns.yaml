@@ -15,3 +15,6 @@ dns_servers:
   - dns+tls://1.0.0.1
 
 listen_host: 127.0.0.1
+
+# One of: panic, fatal, error, warn, info, debug, trace
+log_level: info

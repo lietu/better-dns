@@ -20,7 +20,7 @@ What it can do:
  - Proxy any non-blacklisted DNS requests to a proper DNS server
  - Caches results (minimum 30s, otherwise respects TTL in responses, using a fixed-size LRU) - leads to a minor performance enhancement in some scenarios
  - Override your active DNS servers while it's running and return them to normal on exit
- - Show all the DNS requests your software is doing - maybe you'll find it enlightening
+ - Show all the DNS requests your software is doing (if you increase log level to debug) - maybe you'll find it enlightening
  - Supports Windows, Mac, and Linux (at least based on limited testing)
 
 Current version is quite preliminary still, however it seems to very much work (on Windows 10, Mac OS High Sierra, and Fedora 31 armhfp on Raspberry Pi 2).
@@ -89,7 +89,7 @@ listen_host: 0.0.0.0
  - Cached block lists in case your network isn't working perfectly when you launch the software
  - Periodically checking the lists for updates (e.g. hourly / daily)
  - Monitor for new networks (e.g. WiFi) and update their DNS settings as well
- - Reporting interface similar to Pi-hole
+ - Reporting interface similar to Pi-hole (but probably not as detailed due to privacy issues)
 
 
 # License

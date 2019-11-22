@@ -91,7 +91,7 @@ func NewConfig(src string, usingDefault bool) *Config {
 	if _, err := os.Stat(src); os.IsNotExist(err) {
 		if usingDefault {
 			// Default config path not overridden, file does not exist, just use defaults
-			log.Info("Using built-in default configuration.")
+			log.Debug("Using built-in default configuration.")
 			return &c
 		}
 
@@ -108,7 +108,7 @@ func NewConfig(src string, usingDefault bool) *Config {
 		log.Panicf("Error parsing config file %s: %s", src, err)
 	}
 
-	log.Infof("Using configuration from %s", src)
+	log.Debugf("Using configuration from %s", src)
 
 	validate(c)
 

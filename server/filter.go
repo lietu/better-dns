@@ -3,6 +3,7 @@ package server
 import (
 	"bufio"
 	"github.com/lietu/better-dns/shared"
+	"github.com/lietu/better-dns/stats"
 	"github.com/miekg/dns"
 	"github.com/ryanuber/go-glob"
 	log "github.com/sirupsen/logrus"
@@ -148,7 +149,7 @@ func BlockFromURL(listURL string) {
 		log.Errorf("Error while processing list %s: %s", listURL, err)
 	}
 
-	log.Infof("✔ Parsed %s list in %s", listURL, shared.CleanDuration(time.Since(start)))
+	log.Debugf("✔ Parsed %s list in %s", listURL, stats.CleanDuration(time.Since(start)))
 }
 
 // Show current log lists

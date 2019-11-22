@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"crypto/tls"
 	"errors"
-	"github.com/lietu/better-dns/shared"
+	"github.com/lietu/better-dns/stats"
 	"github.com/miekg/dns"
 	log "github.com/sirupsen/logrus"
 	"io/ioutil"
@@ -43,7 +43,7 @@ func queryDnsOverTls(req *dns.Msg, host string, serverName string) queryResult {
 		res, rtt, err := tlsClient.Exchange(req, server)
 
 		if err != nil {
-			go shared.ReportError(req, res, rtt, err)
+			go stats.ReportError(req, res, rtt, err)
 
 			if err.Error() == "tls: DialWithDialer timed out" {
 				log.Debug("TLS connection timed out.")
@@ -78,7 +78,7 @@ func queryDns(req *dns.Msg, server string) queryResult {
 		res, rtt, err := client.Exchange(req, server)
 
 		if err != nil {
-			go shared.ReportError(req, res, rtt, err)
+			go stats.ReportError(req, res, rtt, err)
 			log.Debugf("Caught error while querying: %s", err)
 		} else {
 			return queryResult{
@@ -134,7 +134,7 @@ func queryDnsOverHttps(req *dns.Msg, serverUrl string) queryResult {
 		rtt := time.Since(start)
 
 		if err != nil {
-			go shared.ReportError(req, res, rtt, err)
+			go stats.ReportError(req, res, rtt, err)
 			log.Errorf("Caught error while querying: %s", err)
 			if httpRes != nil {
 				if err = httpRes.Body.Close(); err != nil {
@@ -145,7 +145,7 @@ func queryDnsOverHttps(req *dns.Msg, serverUrl string) queryResult {
 			if httpRes.StatusCode == 200 {
 				udpPayload, err := ioutil.ReadAll(httpRes.Body)
 				if err != nil {
-					go shared.ReportError(req, res, rtt, err)
+					go stats.ReportError(req, res, rtt, err)
 					if err = httpRes.Body.Close(); err != nil {
 						log.Errorf("Error closing HTTP client body: %s", err)
 					}
@@ -159,7 +159,7 @@ func queryDnsOverHttps(req *dns.Msg, serverUrl string) queryResult {
 				res := &dns.Msg{}
 				err = res.Unpack(udpPayload)
 				if err != nil {
-					go shared.ReportError(req, res, rtt, err)
+					go stats.ReportError(req, res, rtt, err)
 					continue
 				}
 
@@ -171,7 +171,7 @@ func queryDnsOverHttps(req *dns.Msg, serverUrl string) queryResult {
 				msg, _ := ioutil.ReadAll(httpRes.Body)
 				log.Errorf("HTTP response %d %s: %s", httpRes.StatusCode, httpRes.Status, string(msg[:]))
 				err = ErrDnsOverHttpsRequest
-				go shared.ReportError(req, res, rtt, err)
+				go stats.ReportError(req, res, rtt, err)
 				continue
 			}
 		}
@@ -246,7 +246,7 @@ func Query(req *dns.Msg, dnsServers []string) *dns.Msg {
 
 		if qr.res != nil {
 			// Just return first success
-			go shared.ReportSuccess(req, qr.res, qr.rtt, qr.server)
+			go stats.ReportSuccess(req, qr.res, qr.rtt, qr.server)
 			return qr.res
 		} else if received == count {
 			// All servers failed

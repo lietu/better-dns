@@ -1,12 +1,23 @@
-package shared
+package stats
 
 import (
 	"fmt"
+	"github.com/lietu/better-dns/shared"
 	"github.com/miekg/dns"
 	log "github.com/sirupsen/logrus"
 	"sort"
 	"time"
 )
+
+type Stats struct {
+	Blocked   uint64
+	Cached	  uint64
+	Errors    uint64
+	Successes uint64
+	Rtt		  time.Duration
+}
+
+var stats = Stats{0, 0, 0, 0, 0}
 
 func answerResult(a dns.RR) string {
 	if a, ok := a.(*dns.A); ok {
@@ -51,6 +62,7 @@ func ReportError(req *dns.Msg, res *dns.Msg, rtt time.Duration, err error) {
 		c = fmt.Sprintf("error: %s", err)
 	}
 	log.Debugf("❌ %s (%s) not resolved (%s) %s", CleanName(q.Name), dns.TypeToString[q.Qtype], CleanDuration(rtt), c)
+	stats.Errors++
 }
 
 func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string) {
@@ -67,6 +79,7 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 
 	answers := len(res.Answer)
 	if answers == 0 {
+		// No matches
 		return
 	}
 
@@ -109,6 +122,8 @@ func ReportSuccess(req *dns.Msg, res *dns.Msg, rtt time.Duration, server string)
 	result := answerResult(ans)
 
 	log.Debugf("✔ %s (%s) is %s%s for %s (%s)", CleanName(name), t, result, extra, CleanDuration(ttl), CleanDuration(rtt))
+	stats.Successes++
+	stats.Rtt += rtt
 }
 
 func ReportCached(req *dns.Msg, res *dns.Msg) {
@@ -134,17 +149,25 @@ func ReportCached(req *dns.Msg, res *dns.Msg) {
 	}
 
 	log.Debugf("✔ %s (%s) is %s%s (cached)", CleanName(name), t, result, extra)
+	stats.Cached++
 }
 
-func ReportFiltered(req *dns.Msg, be *BlockEntry) {
+func ReportBlocked(req *dns.Msg, be *shared.BlockEntry) {
 	defer func() {
 		if err := recover(); err != nil {
-			log.Errorf("Suppressing panic during ReportFiltered: %s", err)
+			log.Errorf("Suppressing panic during ReportBlocked: %s", err)
 		}
 	}()
 
 	name := req.Question[0].Name
 	log.Debugf("⛔ %s blocked by %s", CleanName(name), be.Src)
+	stats.Blocked++
+}
+
+func GetStats() Stats {
+	latest := stats
+	stats.Rtt = 0  // Reset Rtt calculation
+	return latest
 }
 
 func CleanDuration(d time.Duration) time.Duration {
