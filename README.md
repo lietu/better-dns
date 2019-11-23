@@ -28,6 +28,49 @@ Current version is quite preliminary still, however it seems to very much work (
 You probably have to run it as Administrator/root so it has enough permissions to edit your DNS server configuration and listen to port 53 TCP & UDP, as these are privileged service ports.
 
 
+## Recovery in case of errors
+
+This is still early software and it's possible not all the kinks have yet been worked out. It is possible that you encounter a crash and the software will not automatically recover your DNS settings.
+
+There are some fairly universal solutions to that, if you end up with a broken network connection:
+
+1. Reconnect to your network (toggle Wi-Fi off & on, reconnect ethernet cable, or similar)
+2. Restart the app (should temporarily fix it, though will likely fail to block anything)
+3. Restart your computer (ew, but works)
+
+Alternatively you can run these commands to fix it:
+
+**Windows**:
+
+In Administrator PowerShell:
+
+```powershell
+Get-DnsClientServerAddress  # Check the InterfaceAlias column for names of related interfaces
+SetDnsClientServerAddress -InterfaceAlias "<interface name>" -ResetServerAddresses
+```
+
+**macOS**:
+
+These might require `sudo`:
+
+```bash
+# To list the network interfaces, look for "Hardware Port" -lines
+networksetup -listallhardwareports
+# To reset their DNS settings
+networksetup -setdnsservers "<hardware port>" empty
+```
+
+**Linux**:
+
+Replace `/etc/resolv.conf` with `/etc/resolv.conf.better-dns-tmp`, e.g.:
+
+```bash
+sudo mv -f /etc/resolv.conf.better-dns-tmp /etc/resolv.conf
+# or
+cat /etc/resolv.conf.better-dns-tmp | sudo tee /etc/resolv.conf 
+```
+
+
 ## Configuration
 
 The [.better-dns.yaml](./.better-dns.yaml) has an example configuration. It's expected to be found at `~/.better-dns.yaml` or `%USERPROFILE%\.better-dns.yaml`, or in a file defined by `-config <path>` -argument to `better-dns`.
