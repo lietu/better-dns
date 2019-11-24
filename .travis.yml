@@ -15,6 +15,7 @@ git:
 
 # Skip Travis's automagic failures in dependency resolution
 install:
+  - go get github.com/akavel/rsrc
   - go get -u honnef.co/go/tools/cmd/staticcheck
   - go get -u github.com/kisielk/errcheck
   - curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.21.0
