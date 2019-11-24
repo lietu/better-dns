@@ -84,7 +84,7 @@ for os in $OSES; do
       first=0
     fi
 
-    cd cmd/better-dns
+    cd cmd/better-dns-tray
 
     target="better-dns-tray-$os-$arch"
     if [[ "$os" == "windows" ]]; then
