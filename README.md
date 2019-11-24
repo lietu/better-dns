@@ -73,9 +73,9 @@ cat /etc/resolv.conf.better-dns-tmp | sudo tee /etc/resolv.conf
 
 ## Configuration
 
-The [.better-dns.yaml](./.better-dns.yaml) has an example configuration. It's expected to be found at `~/.better-dns.yaml` or `%USERPROFILE%\.better-dns.yaml`, or in a file defined by `-config <path>` -argument to `better-dns`.
+The [better-dns.yaml](better-dns.yaml) has an example configuration. It's expected to be found at `~/.config/better-dns/better-dns.yaml`, `%APPDATA%\better-dns\better-dns.yaml`, `~/Library/Application Support/better-dns/better-dns.yaml`, or in a file defined by `-config <path>` -argument to `better-dns`.
 
-*DNS Servers*
+**DNS Servers**
 
 By default `better-dns` uses one Cloudflare server with DNS over HTTPS, and one with DNS over TLS, but you may want to customize the servers. Entries should be URIs, with `https://ip/url`, `dns+tls://ip`, or `dns://ip` -format, e.g.:
 
@@ -85,7 +85,8 @@ dns_servers:
   - dns+tls://1.0.0.1
   - dns://192.168.1.1
 ```
-*Block lists*
+
+**Block lists**
 
 There are a number of [default blocklists](./shared/config.go) defined that should be a good basis to start from. If you want to choose your own lists to use, you can define them in a simple list of URLs to use.
 
@@ -102,7 +103,7 @@ block_lists:
  - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
 ```
 
-*Blacklist*
+**Blacklist**
 
 In case you want to add custom entries to block, with simple `*` wildcard support, that's also supported. The default is to block `wpad.*` requests ([Web Proxy Auto-Discovery Protocol](https://en.wikipedia.org/wiki/Web_Proxy_Auto-Discovery_Protocol)) for a minor speedup, but you can remove that or add various entries like this:
 
@@ -115,13 +116,21 @@ blacklist:
  - "prefix.*"
 ```
 
-*Listen address*
+**Listen address**
 
 By default `better-dns` only listens to `127.0.0.1`, but if you want to listen to other interfaces you can set it to listen to a specific interface IP or `0.0.0.0` for all interfaces:
 
 ```yaml
 listen_host: 0.0.0.0
 ```
+
+
+## Better DNS Manager
+
+The `better-dns-tray[.exe]` executable is an experimental attempt to provide a minimal GUI tool to run `better-dns`.
+It will still require Administrator privileges, and it's likely got some significant bugs. Try at your own peril. 
+
+![Better DNS manager UI](./better-dns-tray.png)
 
 
 ## Future ideas
@@ -140,3 +149,5 @@ listen_host: 0.0.0.0
 Short answer: This software is licensed with the BSD 3-clause -license.
 
 Long answer: The license for this software is in [LICENSE.md](./LICENSE.md), the libraries used may have varying other licenses that you need to be separately aware of.
+
+(Original) Icon made by [Vectors Market](https://www.flaticon.com/authors/vectors-market) from [www.flaticon.com](www.flaticon.com)

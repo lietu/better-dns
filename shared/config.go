@@ -5,6 +5,7 @@ import (
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -13,7 +14,7 @@ type Config struct {
 	Blacklist  []string `yaml:"blacklist"`
 	DnsServers []string `yaml:"dns_servers"`
 	ListenHost string   `yaml:"listen_host"`
-	LogLevel string	 	`yaml:"log_level"`
+	LogLevel   string   `yaml:"log_level"`
 }
 
 // Some sensible lists that seem to cause little to no problems
@@ -85,7 +86,7 @@ func NewConfig(src string, usingDefault bool) *Config {
 		Blacklist:  defaultBlacklist,
 		DnsServers: defaultDnsServers,
 		ListenHost: "127.0.0.1",
-		LogLevel: "info",
+		LogLevel:   "info",
 	}
 
 	if _, err := os.Stat(src); os.IsNotExist(err) {
@@ -113,4 +114,24 @@ func NewConfig(src string, usingDefault bool) *Config {
 	validate(c)
 
 	return &c
+}
+
+func GetConfigDir() string {
+	dir, err := os.UserConfigDir()
+	if err != nil {
+		log.Panicf("Couldn't resolve config dir: %s", err)
+	}
+
+	configDir := path.Join(dir, "better-dns")
+	if _, err := os.Stat(configDir); err != nil {
+		if os.IsNotExist(err) {
+			if err := os.MkdirAll(configDir, 0700); err != nil {
+				log.Panicf("Failed to create config dir: %s", err)
+			}
+		} else {
+			log.Panicf("Could not check config dir: %s", err)
+		}
+	}
+
+	return configDir
 }

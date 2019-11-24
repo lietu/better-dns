@@ -1,5 +1,8 @@
 *.exe
+*.exe~
 /better-dns
 coverage.txt
 .idea/
 artifacts/
+*.syso
+cmd/better-dns-tray/better-dns.exe.manifest

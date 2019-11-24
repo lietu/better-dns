@@ -11,10 +11,10 @@ import (
 
 type Stats struct {
 	Blocked   uint64
-	Cached	  uint64
+	Cached    uint64
 	Errors    uint64
 	Successes uint64
-	Rtt		  time.Duration
+	Rtt       time.Duration
 }
 
 var stats = Stats{0, 0, 0, 0, 0}
@@ -166,7 +166,7 @@ func ReportBlocked(req *dns.Msg, be *shared.BlockEntry) {
 
 func GetStats() Stats {
 	latest := stats
-	stats.Rtt = 0  // Reset Rtt calculation
+	stats.Rtt = 0 // Reset Rtt calculation
 	return latest
 }
 

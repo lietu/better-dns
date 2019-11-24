@@ -7,5 +7,5 @@ func RequestPct(requests uint64, total uint64) string {
 	if total > 0 {
 		pct = float64(requests) / float64(total)
 	}
-	return fmt.Sprintf("%.1f%%", 100 * pct)
+	return fmt.Sprintf("%.1f%%", 100*pct)
 }
