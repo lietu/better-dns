@@ -57,7 +57,7 @@ function label() {
 function cmd() {
   local cmd="$@"
   echo "$cmd"
-  $cmd
+  eval "$cmd"
 }
 
 # ----- END FUNCTIONS ----- #
