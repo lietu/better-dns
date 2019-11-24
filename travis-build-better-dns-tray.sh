@@ -19,8 +19,9 @@ function big_label() {
   local len
   local zero
   local fill
-  local text=$(capitalize "$1")
-
+  local text
+  
+  text=$(capitalize "$1")
   len=$(echo -n "$text" | wc -c)
   zero=$(printf %${len}s)
   fill=$(echo -n "$zero" | tr " " "-")
@@ -55,9 +56,8 @@ function label() {
 
 # Poor man's set -x (less spammy)
 function cmd() {
-  local cmd="$@"
-  echo "$cmd"
-  eval "$cmd"
+  echo "$@"
+  "$@"
 }
 
 # ----- END FUNCTIONS ----- #
@@ -74,7 +74,6 @@ for os in $OSES; do
   for arch in ${ARCHITECTURES[${os}]}; do
     export GOOS="$os"
     export GOARCH="$arch"
-    flags=""
 
     if [[ "$first" == "1" ]]; then
       cmd go vet ./cmd/better-dns-tray
@@ -95,7 +94,7 @@ for os in $OSES; do
     label "Building $target for $os $arch"
 
     if [[ "$os" == "windows" ]]; then
-      cmd go build '-ldflags="-H windowsgui"' -o "$target" better-dns-tray.go
+      cmd go build -ldflags "-H windowsgui" -o "$target" better-dns-tray.go
     else
       cmd go build -o "$target" better-dns-tray.go
     fi
