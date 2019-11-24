@@ -64,6 +64,7 @@ function cmd() {
 
 set -e
 
+GOFLAGS=-mod=vendor
 ARTIFACTS="$PWD/artifacts"
 mkdir -p "$ARTIFACTS"
 

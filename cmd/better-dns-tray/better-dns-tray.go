@@ -181,7 +181,7 @@ func (r *betterDnsRunner) Start() {
 	}
 	r.stdin = stdin
 
-	r.cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
+	cmdSettings(r.cmd)
 
 	go func(reader io.ReadCloser) {
 		scanner := bufio.NewScanner(reader)

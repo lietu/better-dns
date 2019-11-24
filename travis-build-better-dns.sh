@@ -66,6 +66,7 @@ set -e
 
 GO111MODULE=on
 CGO_ENABLED=0
+GOFLAGS=-mod=vendor
 ARTIFACTS="$PWD/artifacts"
 mkdir -p "$ARTIFACTS"
 
