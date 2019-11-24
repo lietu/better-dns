@@ -5,7 +5,7 @@ OSES="windows linux darwin"
 
 declare -A ARCHITECTURES
 ARCHITECTURES["darwin"]="amd64"
-ARCHITECTURES["linux"]="amd64 386 arm arm64"
+ARCHITECTURES["linux"]="amd64"
 ARCHITECTURES["windows"]="amd64 386"
 
 # ----- END CONFIGURATION ----- #
