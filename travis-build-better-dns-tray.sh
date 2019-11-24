@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OSES="darwin linux windows"
+OSES="windows linux darwin"
 # In future maybe: dragonfly freebsd netbsd openbsd solaris
 
 declare -A ARCHITECTURES

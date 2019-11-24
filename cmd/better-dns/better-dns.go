@@ -46,7 +46,7 @@ func main() {
 	configFile := *configFileArg
 	usingDefault := configFile == defaultConfig
 
-	if *trayArg == false {
+	if !*trayArg {
 		formatter := &log.TextFormatter{ForceColors: true, DisableTimestamp: true}
 		log.SetFormatter(formatter)
 		log.SetOutput(colorable.NewColorableStdout())
@@ -64,7 +64,7 @@ func main() {
 	// Read config (if it exists)
 	config := shared.NewConfig(configFile, usingDefault)
 
-	if *trayArg == false {
+	if !*trayArg {
 		// Set log level
 		level, err := log.ParseLevel(config.LogLevel)
 		if err != nil {
@@ -95,7 +95,7 @@ func main() {
 		}
 	}()
 
-	if *trayArg == false {
+	if !*trayArg {
 		go monitorStats()
 	} else {
 		go trayStats()

@@ -156,7 +156,7 @@ func newBetterDnsRunner() *betterDnsRunner {
 }
 
 func (r *betterDnsRunner) Start() {
-	if r.cmd != nil && r.cmd.ProcessState != nil && r.cmd.ProcessState.Exited() == false {
+	if r.cmd != nil && r.cmd.ProcessState != nil && !r.cmd.ProcessState.Exited() {
 		log.Info("better-dns already running")
 		// Already running
 		return
