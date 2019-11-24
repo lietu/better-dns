@@ -181,7 +181,7 @@ func (r *betterDnsRunner) Start() {
 	}
 	r.stdin = stdin
 
-	cmdSettings(r.cmd)
+	shared.CmdSettings(r.cmd)
 
 	go func(reader io.ReadCloser) {
 		scanner := bufio.NewScanner(reader)

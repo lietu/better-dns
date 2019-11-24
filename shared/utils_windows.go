@@ -1,12 +1,12 @@
 // +build windows
 
-package main
+package shared
 
 import (
 	"os/exec"
 	"syscall"
 )
 
-func cmdSettings(cmd *exec.Cmd) {
+func CmdSettings(cmd *exec.Cmd) {
 	cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 }
