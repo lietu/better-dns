@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-OSES="windows linux darwin"
+OSES="windows linux"  # TODO: Why darwin no workee?
 # In future maybe: dragonfly freebsd netbsd openbsd solaris
 
 declare -A ARCHITECTURES
