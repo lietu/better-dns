@@ -95,7 +95,7 @@ for os in $OSES; do
     label "Building $target for $os $arch"
 
     if [[ "$os" == "windows" ]]; then
-      cmd go build -ldflags="-H windowsgui" -o "$target" better-dns-tray.go
+      cmd go build '-ldflags="-H windowsgui"' -o "$target" better-dns-tray.go
     else
       cmd go build -o "$target" better-dns-tray.go
     fi
