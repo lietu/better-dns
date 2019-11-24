@@ -120,6 +120,7 @@ func onReady() {
 			} else {
 				runner.Start()
 			}
+
 		case <-menuQuit.ClickedCh:
 			runner.Stop(true)
 			systray.Quit()
@@ -134,12 +135,12 @@ type runnerState struct {
 }
 
 type betterDnsRunner struct {
-	cmd     *exec.Cmd
-	stdin	io.WriteCloser
-	stateCn chan *runnerState
-	state   *runnerState
-	exitStdoutCn  chan bool
-	exitStderrCn  chan bool
+	cmd          *exec.Cmd
+	stdin        io.WriteCloser
+	stateCn      chan *runnerState
+	state        *runnerState
+	exitStdoutCn chan bool
+	exitStderrCn chan bool
 }
 
 func newBetterDnsRunner() *betterDnsRunner {
@@ -155,7 +156,7 @@ func newBetterDnsRunner() *betterDnsRunner {
 }
 
 func (r *betterDnsRunner) Start() {
-	if r.cmd != nil && r.cmd.ProcessState != nil &&  r.cmd.ProcessState.Exited() == false {
+	if r.cmd != nil && r.cmd.ProcessState != nil && r.cmd.ProcessState.Exited() == false {
 		log.Info("better-dns already running")
 		// Already running
 		return
@@ -179,6 +180,8 @@ func (r *betterDnsRunner) Start() {
 		log.Errorf("Failed to get stdin pipe for better-dns: %s", err)
 	}
 	r.stdin = stdin
+
+	r.cmd.SysProcAttr = &syscall.SysProcAttr{HideWindow: true}
 
 	go func(reader io.ReadCloser) {
 		scanner := bufio.NewScanner(reader)

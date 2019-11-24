@@ -21,7 +21,8 @@ import (
 )
 
 const PORT = 53
-var defaultConfig = path.Join(shared.GetConfigDir() , "better-dns.yaml")
+
+var defaultConfig = path.Join(shared.GetConfigDir(), "better-dns.yaml")
 var configFileArg = flag.String("config", defaultConfig, "Path to YAML config")
 var trayArg = flag.Bool("tray", false, "Use better-dns-tray communication protocol")
 
@@ -63,8 +64,8 @@ func main() {
 	// Read config (if it exists)
 	config := shared.NewConfig(configFile, usingDefault)
 
-	// Set logger level
 	if *trayArg == false {
+		// Set log level
 		level, err := log.ParseLevel(config.LogLevel)
 		if err != nil {
 			log.Fatalf("Invalid log level %s: %s", config.LogLevel, err)
@@ -127,7 +128,7 @@ func main() {
 		}
 	}()
 
-	<- exitCn
+	<-exitCn
 
 	shared.RestoreDnsServers()
 	log.Info("Exiting...")
@@ -173,7 +174,6 @@ func monitorStats() {
 		diffSaved := (time.Duration(diff.Cached) * diff.Rtt).Truncate(time.Millisecond)
 		totalSaved := (time.Duration(total.Cached) * rtt).Truncate(time.Millisecond)
 
-
 		log.Infof("")
 		log.Infof("------------------------------")
 		log.Infof("Stats for last %s:", duration)
@@ -213,7 +213,7 @@ func trayStats() {
 			rtt = (previous.Rtt + total.Rtt) / time.Duration(total.Successes)
 		}
 
-		fmt.Printf("S:%d,B:%d,C:%d,E:%d,R:%d\n", total.Successes, total.Blocked, total.Cached, total.Errors, rtt / time.Millisecond)
+		fmt.Printf("S:%d,B:%d,C:%d,E:%d,R:%d\n", total.Successes, total.Blocked, total.Cached, total.Errors, rtt/time.Millisecond)
 
 		previousRtt := previous.Rtt
 		previous = total
