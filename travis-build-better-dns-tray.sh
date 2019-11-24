@@ -20,7 +20,7 @@ function big_label() {
   local zero
   local fill
   local text
-  
+
   text=$(capitalize "$1")
   len=$(echo -n "$text" | wc -c)
   zero=$(printf %${len}s)

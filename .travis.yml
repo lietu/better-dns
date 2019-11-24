@@ -1,5 +1,6 @@
 language: go
-sudo: false
+sudo: true
+dist: bionic
 
 go:
   - "1.13"
@@ -15,6 +16,7 @@ git:
 
 # Skip Travis's automagic failures in dependency resolution
 install:
+  - sudo apt-get install libgtk-3-dev libappindicator3-dev libwebkit2gtk-4.0-dev
   - go get github.com/akavel/rsrc
   - go get -u honnef.co/go/tools/cmd/staticcheck
   - go get -u github.com/kisielk/errcheck
@@ -22,12 +24,9 @@ install:
 
 script:
   - errored=0
-  - bash travis-build-better-dns-tray.sh
-  - if [[ "$?" != "0" ]]; then errored=1; fi
-  - bash travis-build-better-dns.sh
-  - if [[ "$?" != "0" ]]; then errored=1; fi
-  - bash travis-post-build.sh
-  - if [[ "$?" != "0" ]]; then errored=1; fi
+  - bash travis-build-better-dns-tray.sh; if [[ "$?" != "0" ]]; then errored=1; fi
+  - bash travis-build-better-dns.sh; if [[ "$?" != "0" ]]; then errored=1; fi
+  - bash travis-post-build.sh; if [[ "$?" != "0" ]]; then errored=1; fi
   - if [[ "$errored" != "0" ]]; then echo "Build failed."; exit 1; fi
   - export BODY=$(cat DESCRIPTION)
 
