@@ -90,7 +90,7 @@ for os in $OSES; do
     if [[ "$os" == "windows" ]]; then
       target="$target.exe"
       flags="-ldflags='-H windowsgui'"
-      rsrc -manifest better-dns-tray.manifest -o better-dns-tray_windows.syso
+      rsrc -manifest better-dns-tray.exe.manifest -o better-dns-tray_windows.syso
     fi
 
     label "Building $target for $os $arch"
