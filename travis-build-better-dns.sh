@@ -90,7 +90,7 @@ for os in $OSES; do
     target="better-dns-$os-$arch"
     if [[ "$os" == "windows" ]] && [[ ! -f "better-dns_windows.syso" ]]; then
       target="$target.exe"
-      rsrc -manifest better-dns.exe.manifest -o better-dns_windows.syso
+      cmd rsrc -manifest better-dns.exe.manifest -o better-dns_windows.syso
     fi
 
     label "Building $target for $os $arch"

@@ -89,13 +89,17 @@ for os in $OSES; do
     target="better-dns-tray-$os-$arch"
     if [[ "$os" == "windows" ]]; then
       target="$target.exe"
-      flags="-ldflags='-H windowsgui'"
-      rsrc -manifest better-dns-tray.exe.manifest -o better-dns-tray_windows.syso
+      cmd rsrc -manifest better-dns-tray.exe.manifest -o better-dns-tray_windows.syso
     fi
 
     label "Building $target for $os $arch"
 
-    cmd go build "$flags" -o "$target" better-dns.go
+    if [[ "$os" == "windows" ]]; then
+      cmd go build -ldflags="-H windowsgui" -o "$target" better-dns-tray.go
+    else
+      cmd go build -o "$target" better-dns-tray.go
+    fi
+
     cmd mv "$target" "$ARTIFACTS"
     cd -
   done
