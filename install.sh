@@ -26,7 +26,7 @@ Description=Better DNS
 After=network.target
 
 [Service]
-ExecStart=$BINARY_DST -config $CONFIG
+ExecStart=sh -c "sleep 30; exec $BINARY_DST -config $CONFIG"
 ExecStop=kill -2 \$MAINPID
 Restart=always
 User=root
