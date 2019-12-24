@@ -10,7 +10,6 @@ ARCH="unknown"
 BINARY="better-dns-unknown"
 BINARY_DST="/usr/sbin/better-dns"
 CONFIG="/etc/better-dns.yaml"
-LOGDIR="/var/log"
 OS="linux"
 SOURCE="https://github.com/lietu/better-dns/releases/latest/download/"
 
@@ -27,10 +26,11 @@ Description=Better DNS
 After=network.target
 
 [Service]
-ExecStart=$BINARY_DST -config $CONFIG > $LOGDIR/better-dns.log
-ExecStop=kill -2 \$MAINPID; wait \$MAINPID
+ExecStart=$BINARY_DST -config $CONFIG
+ExecStop=kill -2 \$MAINPID
 Restart=always
 User=root
+Type=idle
 
 [Install]
 WantedBy=multi-user.target
@@ -123,7 +123,6 @@ pick_binary
 # Install
 install_binary
 install_config
-mkdir -p "$LOGDIR"
 install_service
 
 echo
