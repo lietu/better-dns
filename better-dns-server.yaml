@@ -1,0 +1,20 @@
+block_lists:
+  - https://raw.githubusercontent.com/StevenBlack/hosts/master/hosts
+  - https://mirror1.malwaredomains.com/files/justdomains
+  - http://sysctl.org/cameleon/hosts
+  - https://s3.amazonaws.com/lists.disconnect.me/simple_tracking.txt
+  - https://s3.amazonaws.com/lists.disconnect.me/simple_ad.txt
+  - https://hosts-file.net/ad_servers.txt
+  - https://pgl.yoyo.org/adservers/serverlist.php?hostformat=hosts&showintro=0&mimetype=plaintext
+
+blacklist:
+  - "wpad.*"  # Web Proxy Auto-Discovery Protocol - minor speedup
+
+dns_servers:
+  - https://1.1.1.1/dns-query
+  - dns+tls://1.0.0.1
+
+listen_host: 0.0.0.0
+
+# One of: panic, fatal, error, warn, info, debug, trace
+log_level: info

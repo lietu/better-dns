@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 
 ARTIFACTS="$PWD/artifacts"
+
+cp better-dns*.yaml "$ARTIFACTS"
+
 cd "$ARTIFACTS"
 sha256sum ./* >> SHA256SUMS
 cd -

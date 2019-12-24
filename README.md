@@ -28,6 +28,23 @@ Current version is quite preliminary still, however it seems to very much work (
 You probably have to run it as Administrator/root so it has enough permissions to edit your DNS server configuration and listen to port 53 TCP & UDP, as these are privileged service ports.
 
 
+## Quick installation on Raspberry Pi
+
+The [install.sh](./install.sh) script can be used to quickly configure Better DNS as a server on e.g. a Raspberry Pi device running in your network. It's never a good idea to just run scripts off the internet on your machine without checking them first, so do that first, then run this:
+
+```bash
+curl -L https://raw.githubusercontent.com/lietu/better-dns/master/install.sh | sudo bash -
+```
+
+It will:
+
+ - Download and install `better-dns` to `/usr/sbin/better-dns`
+ - Set up the [default configuration](./better-dns-server.yaml) to `/etc/better-dns.yaml`
+ - Installs a service to run `/usr/sbin/better-dns -config /etc/better-dns.yaml` at boot and starts it
+
+Afterwards you only need to configure your router's DHCP settings or manually configure your computers to use the Raspberry Pi for DNS. You can also tweak `/etc/better-dns.yaml` to your liking and then restart the service (e.g. `systemctl restart better-dns.service`).
+
+
 ## Recovery in case of errors
 
 This is still early software and it's possible not all the kinks have yet been worked out. It is possible that you encounter a crash and the software will not automatically recover your DNS settings.
