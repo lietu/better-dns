@@ -1,4 +1,5 @@
-[![Travis-CI build status](https://travis-ci.org/lietu/better-dns.svg?branch=master)](https://travis-ci.org/lietu/better-dns)
+[![Travis-CI build status](https://travis-ci.org/lietu/better-dns.svg?branch=master)](https://travis-ci.org/lietu/better-dns)[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Flietu%2Fbetter-dns.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Flietu%2Fbetter-dns?ref=badge_shield)
+
 [![License](https://img.shields.io/badge/License-BSD%203--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause)
 
 # Better DNS
@@ -168,3 +169,6 @@ Short answer: This software is licensed with the BSD 3-clause -license.
 Long answer: The license for this software is in [LICENSE.md](./LICENSE.md), the libraries used may have varying other licenses that you need to be separately aware of.
 
 (Original) Icon made by [Vectors Market](https://www.flaticon.com/authors/vectors-market) from [www.flaticon.com](www.flaticon.com)
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Flietu%2Fbetter-dns.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Flietu%2Fbetter-dns?ref=badge_large)
