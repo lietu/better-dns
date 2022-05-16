@@ -15,7 +15,7 @@ func (idProp *MSAAPROPID) split() (uintptr, uintptr, uintptr, uintptr) {
 	if idProp == nil {
 		return 0, 0, 0, 0
 	}
-	x := (*struct{ a, b, c, d uintptr })(unsafe.Pointer(idProp))
+	x := (*struct { a, b, c, d uintptr })(unsafe.Pointer(idProp))
 	return x.a, x.b, x.c, x.d
 }
 
