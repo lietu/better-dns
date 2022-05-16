@@ -29,7 +29,7 @@ github.com/lxn/win
 github.com/mattn/go-colorable
 # github.com/mattn/go-isatty v0.0.8
 github.com/mattn/go-isatty
-# github.com/miekg/dns v1.1.22
+# github.com/miekg/dns v1.1.25
 github.com/miekg/dns
 # github.com/oxtoacart/bpool v0.0.0-20190530202638-03653db5a59c
 github.com/oxtoacart/bpool
