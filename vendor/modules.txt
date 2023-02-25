@@ -46,7 +46,8 @@ golang.org/x/net/internal/iana
 golang.org/x/net/internal/socket
 golang.org/x/net/ipv4
 golang.org/x/net/ipv6
-# golang.org/x/sys v0.0.0-20191120155948-bd437916bb0e
+# golang.org/x/sys v0.1.0
+golang.org/x/sys/internal/unsafeheader
 golang.org/x/sys/unix
 golang.org/x/sys/windows
 # gopkg.in/Knetic/govaluate.v3 v3.0.0
